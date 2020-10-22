@@ -60,6 +60,7 @@ namespace Rety_Rebeka_Lab2
                     break;
             }
             int pageSize = 2;
+
             return View(await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
