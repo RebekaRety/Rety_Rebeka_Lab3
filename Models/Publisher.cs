@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace Rety_Rebeka_Lab2.Models
+namespace LibraryModel.Models
 {
     public class Publisher
     {

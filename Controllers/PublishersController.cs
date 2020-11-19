@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Rety_Rebeka_Lab2.Data;
-using Rety_Rebeka_Lab2.Models;
+using LibraryModel.Data;
+using LibraryModel.Models;
 using Rety_Rebeka_Lab2.Models.LibraryViewModels;
 
 namespace Rety_Rebeka_Lab2.Controllers
