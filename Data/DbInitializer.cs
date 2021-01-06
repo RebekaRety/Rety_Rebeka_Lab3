@@ -8,31 +8,33 @@ namespace Rety_Rebeka_Lab2.Data
 {
     public class DbInitializer
     {
-        public static void Initialize(LibraryContext context)
+        public static void Initialize(StoreContext context)
         {
             context.Database.EnsureCreated();
-            if (context.Books.Any())
+            if (context.Parfumes.Any())
             {
                 return; // BD a fost creata anterior
             }
-            var books = new Book[]
+            var parfumes = new Parfume[]
             {
- new Book{Title="Baltagul",Author="Mihail Sadoveanu",Price=Decimal.Parse("22")},
- new Book{Title="Enigma Otiliei",Author="George Calinescu",Price=Decimal.Parse("18")},
- new Book{Title="Maytrei",Author="Mircea Eliade",Price=Decimal.Parse("27")}
+                 new Parfume{Name="Bright Crystal", Brand="Versace", Price=Decimal.Parse("260")},
+                 new Parfume{Name="La Vie est Belle", Brand="Lancome", Price=Decimal.Parse("286")},
+                 new Parfume{Name="Dior Addict", Brand="Dior", Price=Decimal.Parse("428")}
             };
-            foreach (Book s in books)
+            foreach (Parfume s in parfumes)
             {
-                context.Books.Add(s);
+                context.Parfumes.Add(s);
             }
             context.SaveChanges();
+
             var customers = new Customer[]
             {
 
- new Customer{CustomerID=1050,Name="Popescu Marcela",BirthDate=DateTime.Parse("1979-09-01")},
- new Customer{CustomerID=1045,Name="Mihailescu Cornel",BirthDate=DateTime.Parse("1969-07-08")},
+                 new Customer{CustomerID=1050,Name="Clara Smith",Adress="Mainstreet, 1", BirthDate=DateTime.Parse("1989-07-19")},
+                 new Customer{CustomerID=1045,Name="John Barn", Adress="Oxford, 34", BirthDate=DateTime.Parse("1980-07-18")},
+                 new Customer{CustomerID=1047,Name="Julia Klein", Adress="Bigstreet, 98",BirthDate=DateTime.Parse("1965-09-28")},
 
- };
+            };
             foreach (Customer c in customers)
             {
                 context.Customers.Add(c);
@@ -40,10 +42,11 @@ namespace Rety_Rebeka_Lab2.Data
             context.SaveChanges();
             var orders = new Order[]
             {
- new Order{BookID=1,CustomerID=1050},
- new Order{BookID=3,CustomerID=1045},
- new Order{BookID=1,CustomerID=1045},
- new Order{BookID=2,CustomerID=1050},
+                 new Order{ParfumeID=1,CustomerID=1050},
+                 new Order{ParfumeID=3,CustomerID=1045},
+                 new Order{ParfumeID=1,CustomerID=1045},
+                 new Order{ParfumeID=2,CustomerID=1050},
+                 new Order{ParfumeID=2,CustomerID=1050},
             };
             foreach (Order e in orders)
             {

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Rety_Rebeka_Lab2.Data;
 using Microsoft.EntityFrameworkCore;
+using Rety_Rebeka_Lab2.Hubs;
 
 namespace Rety_Rebeka_Lab2
 {
@@ -26,9 +27,9 @@ namespace Rety_Rebeka_Lab2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<LibraryContext>(options =>
+            services.AddDbContext<StoreContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,9 +54,11 @@ namespace Rety_Rebeka_Lab2
 
             app.UseEndpoints(endpoints =>
             {
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }

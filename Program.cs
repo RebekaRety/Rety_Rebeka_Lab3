@@ -21,7 +21,7 @@ namespace Rety_Rebeka_Lab2
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<LibraryContext>();
+                    var context = services.GetRequiredService<StoreContext>();
                     DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)

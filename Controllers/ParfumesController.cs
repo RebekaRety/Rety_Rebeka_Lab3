@@ -10,16 +10,16 @@ using Rety_Rebeka_Lab2.Models;
 
 namespace Rety_Rebeka_Lab2
 {
-    public class BooksController : Controller
+    public class ParfumesController : Controller
     {
-        private readonly LibraryContext _context;
+        private readonly StoreContext _context;
 
-        public BooksController(LibraryContext context)
+        public ParfumesController(StoreContext context)
         {
             _context = context;
         }
 
-        // GET: Books
+        // GET: Parfumes
         public async Task<IActionResult> Index(
         string sortOrder,
         string currentFilter,
@@ -27,7 +27,7 @@ namespace Rety_Rebeka_Lab2
         int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
             if (searchString != null)
             {
@@ -38,33 +38,33 @@ namespace Rety_Rebeka_Lab2
                 searchString = currentFilter;
             }
             ViewData["CurrentFilter"] = searchString;
-            var books = from b in _context.Books
-                        select b;
+            var parfumes = from b in _context.Parfumes
+                           select b;
             if (!String.IsNullOrEmpty(searchString))
             {
-                books = books.Where(s => s.Title.Contains(searchString));
+                parfumes = parfumes.Where(s => s.Name.Contains(searchString));
             }
             switch (sortOrder)
             {
-                case "title_desc":
-                    books = books.OrderByDescending(b => b.Title);
+                case "name_desc":
+                    parfumes = parfumes.OrderByDescending(b => b.Name);
                     break;
                 case "Price":
-                    books = books.OrderBy(b => b.Price);
+                    parfumes = parfumes.OrderBy(b => b.Price);
                     break;
                 case "price_desc":
-                    books = books.OrderByDescending(b => b.Price);
+                    parfumes = parfumes.OrderByDescending(b => b.Price);
                     break;
                 default:
-                    books = books.OrderBy(b => b.Title);
+                    parfumes = parfumes.OrderBy(b => b.Name);
                     break;
             }
             int pageSize = 2;
 
-            return View(await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Parfume>.CreateAsync(parfumes.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        // GET: Books/Details/5
+        // GET: Parfumes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -72,39 +72,39 @@ namespace Rety_Rebeka_Lab2
                 return NotFound();
             }
 
-            var book = await _context.Books
+            var parfume = await _context.Parfumes
             .Include(s => s.Orders)
             .ThenInclude(e => e.Customer)
             .AsNoTracking()
             .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (book == null)
+            if (parfume == null)
             {
                 return NotFound();
             }
 
-            return View(book);
+            return View(parfume);
         }
 
-        // GET: Books/Create
+        // GET: Parfumes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Books/Create
+        // POST: Parfumes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Author,Price")] Book book)
+        public async Task<IActionResult> Create([Bind("Name,Brand,Price")] Parfume parfume)
         {
             try
             {
 
                 if (ModelState.IsValid)
                 {
-                    _context.Add(book);
+                    _context.Add(parfume);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -114,10 +114,10 @@ namespace Rety_Rebeka_Lab2
                 ModelState.AddModelError("", "Unable to save changes. " +
                 "Try again, and if the problem persists ");
             }
-            return View(book);
+            return View(parfume);
         }
 
-        // GET: Books/Edit/5
+        // GET: Parfumes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -125,15 +125,15 @@ namespace Rety_Rebeka_Lab2
                 return NotFound();
             }
 
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
+            var parfume = await _context.Parfumes.FindAsync(id);
+            if (parfume == null)
             {
                 return NotFound();
             }
-            return View(book);
+            return View(parfume);
         }
 
-        // POST: Books/Edit/5
+        // POST: Parfumes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
@@ -144,11 +144,11 @@ namespace Rety_Rebeka_Lab2
             {
                 return NotFound();
             }
-            var studentToUpdate = await _context.Books.FirstOrDefaultAsync(s => s.ID == id);
-            if (await TryUpdateModelAsync<Book>(
+            var studentToUpdate = await _context.Parfumes.FirstOrDefaultAsync(s => s.ID == id);
+            if (await TryUpdateModelAsync<Parfume>(
             studentToUpdate,
             "",
-            s => s.Author, s => s.Title, s => s.Price))
+            s => s.Brand, s => s.Name, s => s.Price))
             {
                 try
                 {
@@ -164,7 +164,7 @@ namespace Rety_Rebeka_Lab2
             return View(studentToUpdate);
         }
 
-        // GET: Books/Delete/5
+        // GET: Parfumes/Delete/5
         public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -172,10 +172,10 @@ namespace Rety_Rebeka_Lab2
                 return NotFound();
             }
 
-            var book = await _context.Books
+            var parfume = await _context.Parfumes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (book == null)
+            if (parfume == null)
             {
                 return NotFound();
             }
@@ -184,22 +184,22 @@ namespace Rety_Rebeka_Lab2
                 ViewData["ErrorMessage"] =
                 "Delete failed. Try again";
             }
-            return View(book);
+            return View(parfume);
         }
 
-        // POST: Books/Delete/5
+        // POST: Parfumes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var book = await _context.Books.FindAsync(id);
-            if (book == null)
+            var parfume = await _context.Parfumes.FindAsync(id);
+            if (parfume == null)
             {
                 return RedirectToAction(nameof(Index));
             }
             try
             {
-                _context.Books.Remove(book);
+                _context.Parfumes.Remove(parfume);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

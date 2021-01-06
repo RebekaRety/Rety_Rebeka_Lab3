@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Rety_Rebeka_Lab2.Models.StoreViewModel.OrderGroup>
+@{
+    ViewData["Name"] = "Ordered Parfumes Statistics";
+}
+<h2>Ordered Parfumes Statistics</h2>
+<table>
+    <tr>
+        <th>
+            Order Date - 
+        </th>
+        <th>
+            Ordered Parfumes
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate):   
+            </td>
+            <td>
+               @item.ParfumeCount
+            </td>
+        </tr>
+    }
+</table>
